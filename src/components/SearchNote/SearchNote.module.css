@@ -1,0 +1,28 @@
+.searchNote {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+.searchInput {
+  all: unset;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  height: 38px;
+  width: 260px; /* slightly wider for comfort */
+  padding: 0 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background: #e5e7eb;
+  color: #333;
+  transition: border-color 0.2s ease;
+}
+
+.searchInput:hover,
+.searchInput:focus {
+  border-color: var(--ocean-blue);
+  outline: none;
+}

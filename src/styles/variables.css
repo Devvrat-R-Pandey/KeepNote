@@ -1,0 +1,71 @@
+:root {
+  /* ------------------ Backgrounds ------------------ */
+  --bg: #202022;
+  --header-bg: #181919;
+  --card-bg: #282828;
+  --card-bg-light: #2f2f2f;
+  --card-bg-dark: #1f1f1f;
+
+  /* ------------------ Text Colors ------------------ */
+  --text: #f9fafb;
+  --muted: #9ca3af;
+  --text-inverse: #ffffff;
+
+  /* ------------------ Borders & Shadows ------------------ */
+  --border: #374151;
+  --border-light: #4b5563;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.15);
+  --shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.35);
+
+  /* ------------------ Accent Colors ------------------ */
+  --ocean-blue: #3b82f6;
+  --ocean-blue-dark: #2563eb;
+  --ocean-blue-light: #60a5fa;
+
+  --yellow: #facc15;
+  --yellow-dark: #eab308;
+  --yellow-light: #fde047;
+
+  /* ------------------ Status Colors ------------------ */
+  --status-completed: #22c55e;
+  --status-in-progress: #3b82f6;
+  --status-yet: #facc15;
+  --status-error: #ef4444;
+
+  /* ------------------ Priority Colors ------------------ */
+  --priority-high: #ef4444;
+  --priority-medium: #f59e0b;
+  --priority-low: #22c55e;
+
+  /* ------------------ Radius ------------------ */
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+
+/* ------------------ Global Layout ------------------ */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+
+  /* ✅ Allow one main vertical scrollbar */
+  overflow-y: auto;
+
+  /* ✅ Prevent horizontal scrollbar */
+  overflow-x: hidden;
+
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ✅ Ensure child containers don’t create extra scrollbars */
+main {
+  flex: 1;
+  overflow-y: auto;   /* only main scrolls */
+  overflow-x: hidden; /* no horizontal scroll */
+}

@@ -1,0 +1,101 @@
+{
+  "notes": [
+    {
+      "id": "1",
+      "title": "Complete Assignment",
+      "description": "Finish and submit the math assignment before the deadline.",
+      "status": "yet-to-start",
+      "category": "Academic",
+      "priority": "high"
+    },
+    {
+      "id": "2",
+      "title": "Group Project Discussion",
+      "description": "Schedule a virtual meeting with teammates to plan the science project.",
+      "status": "yet-to-start",
+      "category": "Project",
+      "priority": "medium"
+    },
+    {
+      "id": "3",
+      "title": "Weekly Revision",
+      "description": "Review topics covered in class during the week.",
+      "status": "completed",
+      "category": "Academic",
+      "priority": "low"
+    },
+    {
+      "id": "4",
+      "title": "Lab Report Submission",
+      "description": "Compile results and submit the chemistry lab report online.",
+      "status": "completed",
+      "category": "Academic",
+      "priority": "medium"
+    },
+    {
+      "id": "5",
+      "title": "Library Book Return",
+      "description": "Return borrowed books to the library before the due date.",
+      "status": "yet-to-start",
+      "category": "Admin",
+      "priority": "low"
+    },
+    {
+      "id": "6",
+      "title": "Class Notes Update",
+      "description": "Organize handwritten notes and upload them to Google Drive.",
+      "status": "completed",
+      "category": "Organization",
+      "priority": "low"
+    },
+    {
+      "id": "7",
+      "title": "Attend Seminar",
+      "description": "Participate in the online seminar on career opportunities.",
+      "status": "completed",
+      "category": "Career",
+      "priority": "medium"
+    },
+    {
+      "id": "8",
+      "title": "Project Presentation",
+      "description": "Create slides and rehearse for the history project presentation.",
+      "status": "yet-to-start",
+      "category": "Project",
+      "priority": "medium"
+    },
+    {
+      "id": "9",
+      "title": "Extracurricular Activity",
+      "description": "Practice for the annual sports meet scheduled next week.",
+      "status": "yet-to-start",
+      "category": "Extracurricular",
+      "priority": "low"
+    },
+    {
+      "id": 10,
+      "title": "SafeNest",
+      "description": "A Women Safety Application.",
+      "category": "Rescue",
+      "priority": "high",
+      "status": "yet-to-start"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "firstName": "Devvrat",
+      "lastName": "Pandey",
+      "email": "demodekhlo@gmail.com",
+      "password": "123456",
+      "confirmPassword": "123456",
+      "gender": "Male",
+      "age": "24",
+      "phone": "8286558517",
+      "street": "Ghatkopar East",
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "zip": "400075"
+    }
+  ]
+}

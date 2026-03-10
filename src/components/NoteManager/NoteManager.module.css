@@ -1,0 +1,77 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ✅ Let main handle scrolling */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: flex-start;
+
+  /* ✅ allow only one vertical scrollbar */
+  overflow-y: auto;
+
+  /* ✅ kill horizontal scrollbar */
+  overflow-x: hidden;
+}
+
+/* Title above the grid */
+.chroniclesTitle {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 16px 0 8px;
+}
+
+/* Sort bar layout */
+.sortBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.sortBar label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.sortBar select {
+  background-color: var(--header-bg);
+  color: var(--text);
+  border: 1px solid var(--text);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.sortBar select option {
+  background-color: var(--header-bg);
+  color: var(--text);
+}
+
+/* ✅ Wrapper should not scroll itself */
+.noteListWrapper {
+  padding: 0 12px;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+/* Optional: tighter card layout */
+.card {
+  min-height: 150px;
+  padding: 10px;
+}
+
+.advancedSearchWrapper {
+  margin-top: 24px;
+}
