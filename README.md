@@ -1,73 +1,121 @@
-# React + TypeScript + Vite
+# 📝 KeepNote
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A feature-rich note management app built with **HTML**, **CSS**, **React** and **TypeScript**. KeepNote lets you create, search, filter, sort, and manage personal notes with a clean dark-themed UI.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## React Compiler
+- 🔐 User Authentication (Login / Register)
+- 📋 Create, View, and Delete Notes
+- 🔍 Basic Search — filter notes by title in real time
+- 🔎 Advanced Search — filter by Category & Priority with search count tracking
+- 🗂️ Sort notes by Status or Priority
+- 📄 Note Detail Page
+- 👤 User Profile Page
+- 🌙 Dark themed UI with styled-components & MUI
+- 🔔 Snackbar notifications for all actions
+- 🛡️ Protected Routes — unauthenticated users redirected to login
+- 💾 Persistent login via localStorage
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| Technology | Usage |
+|---|---|
+| React 18 | UI Framework |
+| TypeScript | Type Safety |
+| React Router v6 | Client-side Routing |
+| MUI (Material UI) | UI Components |
+| Styled Components | Custom Styling |
+| Axios | HTTP Requests |
+| JSON Server | Mock REST API |
+| useReducer + Context | Global State Management |
+| Jest + React Testing Library | Unit Testing |
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 📁 Project Structure
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+keepNote
+├─ src/
+│  ├─ assets/
+│  ├─ components/
+│  │  ├─ AddNoteForm/
+│  │  ├─ AdvancedNoteSearch/
+│  │  ├─ ErrorMessage/
+│  │  ├─ Footer/
+│  │  ├─ Header/
+│  │  ├─ NoteCard/
+│  │  ├─ NoteList/
+│  │  ├─ NoteManager/
+│  │  ├─ RegistrationForm/
+│  │  ├─ SearchNote/
+│  │  ├─ NoteContainer.tsx
+│  │  └─ ProtectedRoute.tsx
+│  ├─ context/
+│  │  ├─ AppContext.tsx
+│  │  ├─ AuthContext.tsx
+│  │  ├─ AuthProvider.tsx
+│  │  └─ SnackbarContext.tsx
+│  ├─ data/
+│  ├─ hooks/
+│  │  ├─ useFetch.ts
+│  │  └─ useFetchUsers.ts
+│  ├─ pages/
+│  │  ├─ LoginPage.tsx
+│  │  ├─ NoteDetail.tsx
+│  │  ├─ PageNotFound.tsx
+│  │  ├─ RegistrationPage.tsx
+│  │  └─ UserProfile.tsx
+│  ├─ reducers/
+│  │  ├─ authReducer.ts
+│  │  ├─ notesReducer.ts
+│  │  └─ rootReducer.ts
+│  ├─ services/
+│  │  ├─ noteService.ts
+│  │  └─ userService.ts
+│  ├─ styles/
+│  │  └─ variables.css
+│  ├─ types/
+│  │  └─ Note.ts
+│  ├─ utils/
+│  │  ├─ FilterNotes.ts
+│  │  └─ ValidationRules.tsx
+│  ├─ App.tsx
+│  ├─ main.tsx
+│  └─ index.css
+├─ .gitignore
+├─ babel.config.js
+├─ eslint.config.js
+├─ index.html
+├─ jest.config.js
+├─ jest.setup.ts
+├─ package.json
+├─ tsconfig.json
+└─ vite.config.ts
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📸 Screenshots
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Login Page
+<img width="1907" height="861" alt="image" src="https://github.com/user-attachments/assets/fdd9f065-c9f3-44a8-874b-758d5bcaf804" />
+
+### Register Page
+<img width="1886" height="865" alt="image" src="https://github.com/user-attachments/assets/41637d23-94f9-413f-9359-72e0ff8bd832" />
+
+### Home Page
+<img width="1902" height="862" alt="image" src="https://github.com/user-attachments/assets/6d0ca86d-4591-462c-b267-c0110f759a22" />
+
+### User Profile Page
+<img width="1903" height="862" alt="image" src="https://github.com/user-attachments/assets/c80c0959-b0e6-46d1-a1e2-2b58eda8041e" />
+
+### Note Detail
+<img width="1888" height="865" alt="image" src="https://github.com/user-attachments/assets/c9ea3765-eb36-47a8-a194-88a0a91e14ff" />
+
+### Advanced Search
+<img width="1908" height="863" alt="image" src="https://github.com/user-attachments/assets/e4faf865-3f18-4901-84e1-55a2d780a5d5" />
