@@ -39,37 +39,77 @@ A feature-rich note management app built with **HTML**, **CSS**, **React** and *
 ## 📁 Project Structure
 
 ```
-keepNote
+KeepNote/
+├─ public/
+│  └─ vite.svg
 ├─ src/
 │  ├─ assets/
+│  │  └─ react.svg
 │  ├─ components/
 │  │  ├─ AddNoteForm/
+│  │  │  ├─ AddNoteForm.module.css
+│  │  │  └─ AddNoteForm.tsx
 │  │  ├─ AdvancedNoteSearch/
+│  │  │  ├─ AdvancedNoteSearch.styles.ts
+│  │  │  ├─ AdvancedNoteSearch.test.tsx
+│  │  │  └─ AdvancedNoteSearch.tsx
 │  │  ├─ ErrorMessage/
+│  │  │  ├─ ErrorMessage.styles.ts
+│  │  │  └─ ErrorMessage.tsx
 │  │  ├─ Footer/
+│  │  │  ├─ Footer.module.css
+│  │  │  ├─ Footer.test.tsx
+│  │  │  └─ Footer.tsx
 │  │  ├─ Header/
+│  │  │  ├─ Header.module.css
+│  │  │  └─ Header.tsx
 │  │  ├─ NoteCard/
+│  │  │  ├─ NoteCard.styles.ts
+│  │  │  ├─ NoteCard.test.tsx
+│  │  │  └─ NoteCard.tsx
 │  │  ├─ NoteList/
+│  │  │  ├─ NoteList.module.css
+│  │  │  ├─ NoteList.test.tsx
+│  │  │  └─ NoteList.tsx
 │  │  ├─ NoteManager/
-│  │  ├─ RegistrationForm/
+│  │  │  ├─ NoteManager.module.css
+│  │  │  └─ NoteManager.tsx
 │  │  ├─ SearchNote/
-│  │  ├─ NoteContainer.tsx
+│  │  │  ├─ SearchNote.module.css
+│  │  │  ├─ SearchNote.test.tsx
+│  │  │  └─ SearchNote.tsx
 │  │  └─ ProtectedRoute.tsx
 │  ├─ context/
 │  │  ├─ AppContext.tsx
+│  │  ├─ AppProvider.tsx
 │  │  ├─ AuthContext.tsx
 │  │  ├─ AuthProvider.tsx
-│  │  └─ SnackbarContext.tsx
+│  │  ├─ SnackbarContext.ts
+│  │  └─ SnackbarProvider.tsx
 │  ├─ data/
+│  │  └─ notes.json
 │  ├─ hooks/
 │  │  ├─ useFetch.ts
-│  │  └─ useFetchUsers.ts
+│  │  ├─ useFetchUsers.ts
+│  │  └─ useSnackbar.ts
 │  ├─ pages/
-│  │  ├─ LoginPage.tsx
-│  │  ├─ NoteDetail.tsx
-│  │  ├─ PageNotFound.tsx
-│  │  ├─ RegistrationPage.tsx
-│  │  └─ UserProfile.tsx
+│  │  ├─ LoginPage/
+│  │  │  ├─ LoginPage.module.css
+│  │  │  └─ LoginPage.tsx
+│  │  ├─ NoteDetail/
+│  │  │  ├─ NoteDetail.module.css
+│  │  │  └─ NoteDetail.tsx
+│  │  ├─ PageNotFound/
+│  │  │  ├─ PageNotFound.module.css
+│  │  │  └─ PageNotFound.tsx
+│  │  ├─ Registration/
+│  │  │  ├─ RegistrationDialog.tsx
+│  │  │  ├─ RegistrationForm.tsx
+│  │  │  ├─ RegistrationPage.module.css
+│  │  │  └─ RegistrationPage.tsx
+│  │  └─ UserProfile/
+│  │     ├─ UserProfile.module.css
+│  │     └─ UserProfile.tsx
 │  ├─ reducers/
 │  │  ├─ authReducer.ts
 │  │  ├─ notesReducer.ts
@@ -84,18 +124,26 @@ keepNote
 │  ├─ utils/
 │  │  ├─ FilterNotes.ts
 │  │  └─ ValidationRules.tsx
+│  ├─ App.css
+│  ├─ App.module.css
+│  ├─ App.test.tsx
 │  ├─ App.tsx
-│  ├─ main.tsx
-│  └─ index.css
+│  ├─ index.css
+│  └─ main.tsx
 ├─ .gitignore
 ├─ babel.config.js
 ├─ eslint.config.js
 ├─ index.html
 ├─ jest.config.js
 ├─ jest.setup.ts
+├─ package-lock.json
 ├─ package.json
+├─ tsconfig.app.json
 ├─ tsconfig.json
+├─ tsconfig.node.json
+├─ tsconfig.test.json
 └─ vite.config.ts
+
 ```
 
 ---
