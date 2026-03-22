@@ -14,7 +14,8 @@ import {
   PriorityDot,
   StatusLabel,
   ActionRow,
-  ActionIcon,
+  EditActionIcon,
+  DeleteActionIcon,
 } from "./NoteCard.styles";
 
 import {
@@ -27,26 +28,24 @@ import {
 
 interface Props {
   note: Note;
-  onDelete?: (id: number) => void; // ✅ centralized delete handler from NoteManager
+  onDelete?: (id: number) => void;
 }
 
 const NoteCard: React.FC<Props> = ({ note, onDelete }) => {
   const navigate = useNavigate();
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  // Normalize priority safely
   const priorityLevel = note.priority
     ? (note.priority.toLowerCase() as "high" | "medium" | "low")
     : null;
 
   const handleDelete = () => {
-    onDelete?.(note.id); // ✅ triggers centralized API delete in NoteManager
+    onDelete?.(note.id);
     setConfirmOpen(false);
   };
 
   return (
     <StyledCard role="article">
-      {/* Content */}
       <div>
         <CardHeader>
           {priorityLevel && (
@@ -65,30 +64,26 @@ const NoteCard: React.FC<Props> = ({ note, onDelete }) => {
         </Meta>
       </div>
 
-      {/* Actions */}
       <ActionRow>
         <Tooltip title="Edit Note">
-          <ActionIcon
+          <EditActionIcon
             aria-label="Edit Note"
             onClick={() => navigate(`/notes/${note.id}`)}
-            style={{ color: "#3b82f6" }} // blue for edit
           >
             <EditIcon fontSize="small" />
-          </ActionIcon>
+          </EditActionIcon>
         </Tooltip>
 
         <Tooltip title="Delete Note">
-          <ActionIcon
+          <DeleteActionIcon
             aria-label="Delete Note"
-            onClick={() => setConfirmOpen(true)} // ✅ open dialog
-            style={{ color: "#ef4444" }} // red for delete
+            onClick={() => setConfirmOpen(true)}
           >
             <DeleteIcon fontSize="small" />
-          </ActionIcon>
+          </DeleteActionIcon>
         </Tooltip>
       </ActionRow>
 
-      {/* ✅ Custom confirmation dialog */}
       <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
         <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
@@ -96,11 +91,7 @@ const NoteCard: React.FC<Props> = ({ note, onDelete }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setConfirmOpen(false)}>Cancel</Button>
-          <Button
-            onClick={handleDelete}
-            color="error"
-            variant="contained"
-          >
+          <Button onClick={handleDelete} color="error" variant="contained">
             Delete
           </Button>
         </DialogActions>

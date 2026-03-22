@@ -1,15 +1,12 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-
-/* -------------------- Auth State Control -------------------- */
+import type { ReactNode } from "react";
 
 let mockIsAuthenticated = true;
 
-/* -------------------- Mocks -------------------- */
-
 jest.mock("./components/Header/Header", () => ({
   __esModule: true,
-  default: ({ toggleButton }: any) => (
+  default: ({ toggleButton }: { toggleButton: ReactNode }) => (
     <header data-testid="header">
       Header Component
       {toggleButton}
@@ -24,7 +21,7 @@ jest.mock("./components/Footer/Footer", () => ({
 
 jest.mock("./components/NoteManager/NoteManager", () => ({
   __esModule: true,
-  default: ({ searchTerm, viewMode }: any) => (
+  default: ({ searchTerm, viewMode }: { searchTerm: string; viewMode: string }) => (
     <div data-testid="note-manager">
       <span data-testid="viewmode">ViewMode: {viewMode}</span>
       <span data-testid="searchterm">SearchTerm: {searchTerm}</span>
@@ -32,55 +29,70 @@ jest.mock("./components/NoteManager/NoteManager", () => ({
   ),
 }));
 
-jest.mock("./pages/LoginPage", () => ({
+jest.mock("./pages/LoginPage/LoginPage", () => ({
   __esModule: true,
   default: () => <div data-testid="login-page">Login</div>,
 }));
 
-jest.mock("./pages/PageNotFound", () => ({
+jest.mock("./pages/Registration/RegistrationPage", () => ({
+  __esModule: true,
+  default: () => <div data-testid="register-page">Register</div>,
+}));
+
+jest.mock("./pages/PageNotFound/PageNotFound", () => ({
   __esModule: true,
   default: () => <div data-testid="not-found">404</div>,
 }));
 
-jest.mock("./context/SnackbarContext", () => ({
+jest.mock("./context/SnackbarProvider", () => ({
   __esModule: true,
-  SnackbarProvider: ({ children }: any) => <>{children}</>,
+  SnackbarProvider: ({ children }: { children: ReactNode }) => <>{children}</>,
+}));
+
+jest.mock("./hooks/useSnackbar", () => ({
+  __esModule: true,
   useSnackbar: () => ({ showSnackbar: jest.fn() }),
 }));
 
-jest.mock("./context/AppContext", () => {
-  const actual = jest.requireActual("./context/AppContext");
-  const React = require("react");
+jest.mock("./context/AppProvider", () => ({
+  __esModule: true,
+  AppProvider: ({ children }: { children: ReactNode }) => {
+    const { AppContext } = jest.requireActual("./context/AppContext");
 
-  const MockAppProvider = ({ children }: any) => {
-    const mockState = {
-      auth: {
-        isAuthenticated: mockIsAuthenticated,
-        userId: mockIsAuthenticated ? 1 : null,
-        user: mockIsAuthenticated
-          ? { id: 1, email: "test@example.com" }
-          : undefined,
-      },
-      notes: actual.initialState.notes,
-    };
-    return React.createElement(
-      actual.AppContext.Provider,
-      { value: { state: mockState, dispatch: jest.fn() } },
-      children
+    return (
+      <AppContext.Provider
+        value={{
+          state: {
+            auth: {
+              isAuthenticated: mockIsAuthenticated,
+              userId: mockIsAuthenticated ? 1 : null,
+              user: mockIsAuthenticated
+                ? { id: 1, email: "test@example.com" }
+                : undefined,
+            },
+            notes: {
+              notes: [],
+              filteredNotes: [],
+              advancedFilteredNotes: [],
+              sortBy: "",
+              searchCount: 0,
+              searchesPerformed: 0,
+              searchUrl: "",
+              errorMessage: "",
+              hasSearched: false,
+              activeSearchTerm: "",
+            },
+          },
+          dispatch: jest.fn(),
+        }}
+      >
+        {children}
+      </AppContext.Provider>
     );
-  };
-
-  return {
-    ...actual,
-    AppProvider: MockAppProvider,
-  };
-});
-
-/* -------------------- Import App after mocks -------------------- */
+  },
+}));
 
 import App from "./App";
-
-/* -------------------- Tests -------------------- */
 
 describe("App Component", () => {
   beforeEach(() => {
@@ -91,7 +103,6 @@ describe("App Component", () => {
 
   it("renders Header, Footer, and NoteManager when logged in", () => {
     render(<App />);
-
     expect(screen.getByTestId("header")).toBeInTheDocument();
     expect(screen.getByTestId("note-manager")).toBeInTheDocument();
     expect(screen.getByTestId("footer")).toBeInTheDocument();
@@ -99,33 +110,24 @@ describe("App Component", () => {
 
   it("toggles between basic and advanced search", async () => {
     const user = userEvent.setup();
-
     render(<App />);
 
-    await user.click(
-      screen.getByRole("button", { name: /advanced search/i })
-    );
+    await user.click(screen.getByRole("button", { name: /advanced search/i }));
     expect(screen.getByTestId("viewmode")).toHaveTextContent("advanced");
 
-    await user.click(
-      screen.getByRole("button", { name: /basic search/i })
-    );
+    await user.click(screen.getByRole("button", { name: /basic search/i }));
     expect(screen.getByTestId("viewmode")).toHaveTextContent("basic");
   });
 
   it("redirects unauthenticated users to login", async () => {
     mockIsAuthenticated = false;
-
     render(<App />);
-
     expect(await screen.findByTestId("login-page")).toBeInTheDocument();
   });
 
   it("renders 404 for unknown routes", () => {
     window.history.pushState({}, "", "/random");
-
     render(<App />);
-
     expect(screen.getByTestId("not-found")).toBeInTheDocument();
   });
 });

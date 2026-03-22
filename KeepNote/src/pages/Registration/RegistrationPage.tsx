@@ -1,22 +1,22 @@
 import React, { useState, useContext } from "react";
-import { Box, Typography, Button, Paper } from "@mui/material";
+import { Button, Paper } from "@mui/material";
 import { useForm } from "react-hook-form";
+import type { FieldValues } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
-import RegistrationForm from "../components/RegistrationForm/RegistrationForm";
-import { addUser } from "../services/userService";
-import { AppContext } from "../context/AppContext";
-import { useSnackbar } from "../context/SnackbarContext";
+import RegistrationForm from "./RegistrationForm";
+import { addUser } from "../../services/userService";
+import type { User } from "../../services/userService";
+import { AppContext } from "../../context/AppContext";
+import { useSnackbar } from "../../hooks/useSnackbar";
+import styles from "../../pages/Registration/RegistrationPage.module.css";
 
 const TOTAL_STEPS = 3;
 
 const RegistrationPage: React.FC = () => {
   const [step, setStep] = useState(1);
-
   const navigate = useNavigate();
   const { dispatch } = useContext(AppContext);
-
-  /* global snackbar */
   const { showSnackbar } = useSnackbar();
 
   const {
@@ -32,66 +32,35 @@ const RegistrationPage: React.FC = () => {
       step === 1
         ? ["firstName", "lastName", "email", "password", "confirmPassword"]
         : step === 2
-        ? ["gender", "age", "phone", "street", "city", "state", "zip"]
-        : [];
-
+          ? ["gender", "age", "phone", "street", "city", "state", "zip"]
+          : [];
     if (await trigger(fields)) setStep((prev) => prev + 1);
   };
 
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: FieldValues) => {
     try {
-      const newUser = await addUser(data);
-
-      /* save user locally */
+      const newUser = await addUser(data as Omit<User, "id">);
       localStorage.setItem("loggedInUser", JSON.stringify(newUser));
-
-      /* update global auth state */
       dispatch({
         type: "LOGIN",
         payload: { userId: newUser.id, user: newUser },
       });
-
       showSnackbar("You have registered successfully!", "success");
-
       setTimeout(() => navigate("/home"), 1500);
-
-    } catch (err: any) {
-      showSnackbar(err.message || "Registration failed.", "error");
+    } catch (err) {
+      showSnackbar(
+        err instanceof Error ? err.message : "Registration failed.",
+        "error",
+      );
     }
   };
 
   return (
-    <Box
-      sx={{
-        minHeight: "calc(100vh - 120px)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "var(--app-bg)",
-        px: 2,
-      }}
-    >
-      <Paper
-        elevation={3}
-        sx={{
-          width: "100%",
-          maxWidth: 420,
-          py: 2,
-          px: 2,
-          borderRadius: 2,
-        }}
-      >
-        <Typography
-          variant="subtitle2"
-          fontWeight={600}
-          align="center"
-          mb={1}
-          color="text.secondary"
-        >
-          Registration
-        </Typography>
+    <div className={styles.page}>
+      <Paper elevation={3} className={styles.card}>
+        <p className={styles.pageTitle}>Registration</p>
 
         <RegistrationForm
           step={step}
@@ -100,19 +69,12 @@ const RegistrationPage: React.FC = () => {
           watch={watch}
         />
 
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            mt: 1.5,
-          }}
-        >
+        <div className={styles.btnRow}>
           {step > 1 && (
             <Button size="small" variant="outlined" onClick={prevStep}>
               Back
             </Button>
           )}
-
           {step < TOTAL_STEPS ? (
             <Button size="small" variant="contained" onClick={nextStep}>
               Next
@@ -127,9 +89,9 @@ const RegistrationPage: React.FC = () => {
               Submit
             </Button>
           )}
-        </Box>
+        </div>
       </Paper>
-    </Box>
+    </div>
   );
 };
 

@@ -1,77 +1,77 @@
-.app {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background: var(--bg);
-  color: var(--text);
-}
-
-/* ✅ Let main handle scrolling */
-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  justify-content: flex-start;
-
-  /* ✅ allow only one vertical scrollbar */
+/* ------------------ Main container ------------------ */
+.main {
   overflow-y: auto;
-
-  /* ✅ kill horizontal scrollbar */
   overflow-x: hidden;
+  height: 79vh;
 }
 
-/* Title above the grid */
-.chroniclesTitle {
-  text-align: center;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text);
-  margin: 16px 0 8px;
-}
-
-/* Sort bar layout */
-.sortBar {
+/* ------------------ Loading spinner ------------------ */
+.loading {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 16px;
+  height: 60vh;
 }
 
-.sortBar label {
-  font-size: 13px;
-  color: var(--muted);
+/* ------------------ Add Note accordion box ------------------ */
+.addNoteBox {
+  text-align: center;
+  margin-top: 8px;
 }
 
-.sortBar select {
-  background-color: var(--header-bg);
-  color: var(--text);
-  border: 1px solid var(--text);
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
+.addNotePaper {
+  padding: 12px 24px !important;
+  border-radius: 4px !important;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.addNoteToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   cursor: pointer;
 }
 
-.sortBar select option {
-  background-color: var(--header-bg);
+.addNoteToggleLabel {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.expandIcon {
+  transition: transform 0.3s;
+}
+
+.expandIcon.open {
+  transform: rotate(180deg);
+}
+
+.addNoteCollapse {
+  margin-top: 8px;
+}
+
+/* ------------------ Title bar (title + sort) ------------------ */
+.titleBar {
+  text-align: center;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.sectionTitle {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
   color: var(--text);
 }
 
-/* ✅ Wrapper should not scroll itself */
+.sortControl {
+  min-width: 160px !important;
+}
+
+/* ------------------ Note list wrapper ------------------ */
 .noteListWrapper {
   padding: 0 12px;
   margin-top: 4px;
   margin-bottom: 8px;
-}
-
-/* Optional: tighter card layout */
-.card {
-  min-height: 150px;
-  padding: 10px;
-}
-
-.advancedSearchWrapper {
-  margin-top: 24px;
 }

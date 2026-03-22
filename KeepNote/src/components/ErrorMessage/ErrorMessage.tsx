@@ -1,4 +1,5 @@
 import React from "react";
+import { ErrorMessageContainer, ErrorMessageText } from "./ErrorMessage.styles";
 
 interface ErrorMessageProps {
   type?: "error" | "info";
@@ -7,17 +8,12 @@ interface ErrorMessageProps {
 
 const ErrorMessage: React.FC<ErrorMessageProps> = ({ type = "error", message }) => {
   return (
-    <p
+    <ErrorMessageContainer
+      type={type}
       role={type === "error" ? "alert" : "status"}
-      style={{
-        color: type === "error" ? "#ef4444" : "var(--text)",
-        fontSize: "18px",
-        textAlign: "center",
-        margin: "8px 0"
-      }}
     >
-      {message}
-    </p>
+      <ErrorMessageText>{message}</ErrorMessageText>
+    </ErrorMessageContainer>
   );
 };
 

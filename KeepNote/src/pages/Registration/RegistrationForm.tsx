@@ -1,38 +1,24 @@
 import React from "react";
-import {
-  Box,
-  TextField,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  Typography,
-} from "@mui/material";
-import type { UseFormRegister, FieldErrors, UseFormWatch } from "react-hook-form";
+import { TextField, RadioGroup, FormControlLabel, Radio } from "@mui/material";
+import type { UseFormRegister, FieldErrors, UseFormWatch, FieldValues } from "react-hook-form";
 import { validationRules } from "../../utils/ValidationRules";
+import styles from "../../pages/Registration/RegistrationPage.module.css";
 
 interface Props {
   step: number;
-  register: UseFormRegister<any>;
+  register: UseFormRegister<FieldValues>;
   errors: FieldErrors;
-  watch: UseFormWatch<any>;
+  watch: UseFormWatch<FieldValues>;
 }
 
-const RegistrationForm: React.FC<Props> = ({
-  step,
-  register,
-  errors,
-  watch,
-}) => {
+const RegistrationForm: React.FC<Props> = ({ step, register, errors, watch }) => {
   const password = watch("password");
 
   if (step === 3) {
     const values = watch();
     return (
-      <Box>
-        <Typography variant="h6" gutterBottom>
-          Review Your Details
-        </Typography>
-
+      <div className={styles.reviewBox}>
+        <p className={styles.reviewTitle}>Review Your Details</p>
         {[
           ["First Name", values.firstName],
           ["Last Name", values.lastName],
@@ -45,16 +31,16 @@ const RegistrationForm: React.FC<Props> = ({
           ["State", values.state],
           ["Zip", values.zip],
         ].map(([label, value]) => (
-          <Typography key={label}>
+          <p key={label} className={styles.reviewRow}>
             <strong>{label}:</strong> {value}
-          </Typography>
+          </p>
         ))}
-      </Box>
+      </div>
     );
   }
 
   return (
-    <Box display="flex" flexDirection="column" gap={2}>
+    <div className={styles.fieldGroup}>
       {step === 1 && (
         <>
           <TextField
@@ -63,21 +49,18 @@ const RegistrationForm: React.FC<Props> = ({
             error={!!errors.firstName}
             helperText={errors.firstName?.message as string}
           />
-
           <TextField
             label="Last Name"
             {...register("lastName", validationRules.lastName)}
             error={!!errors.lastName}
             helperText={errors.lastName?.message as string}
           />
-
           <TextField
             label="Email"
             {...register("email", validationRules.email)}
             error={!!errors.email}
             helperText={errors.email?.message as string}
           />
-
           <TextField
             type="password"
             label="Password"
@@ -85,14 +68,12 @@ const RegistrationForm: React.FC<Props> = ({
             error={!!errors.password}
             helperText={errors.password?.message as string}
           />
-
           <TextField
             type="password"
             label="Confirm Password"
             {...register("confirmPassword", {
               ...validationRules.confirmPassword,
-              validate: (value) =>
-                value === password || "Passwords do not match",
+              validate: (value) => value === password || "Passwords do not match",
             })}
             error={!!errors.confirmPassword}
             helperText={errors.confirmPassword?.message as string}
@@ -102,17 +83,17 @@ const RegistrationForm: React.FC<Props> = ({
 
       {step === 2 && (
         <>
-<RadioGroup row defaultValue="">
-  {["Male", "Female", "Non-Binary"].map((option) => (
-    <FormControlLabel
-      key={option}
-      value={option}
-      control={<Radio {...register("gender", validationRules.gender)} />}
-      label={option}
-    />
-  ))}
-</RadioGroup>
-          <Typography color="error">{errors.gender?.message as string}</Typography>
+          <RadioGroup row defaultValue="" className={styles.radioGroup}>
+            {["Male", "Female", "Non-Binary"].map((option) => (
+              <FormControlLabel
+                key={option}
+                value={option}
+                control={<Radio {...register("gender", validationRules.gender)} />}
+                label={option}
+              />
+            ))}
+          </RadioGroup>
+          <p className={styles.genderError}>{errors.gender?.message as string}</p>
 
           <TextField
             label="Age"
@@ -120,35 +101,30 @@ const RegistrationForm: React.FC<Props> = ({
             error={!!errors.age}
             helperText={errors.age?.message as string}
           />
-
           <TextField
             label="Phone Number"
             {...register("phone", validationRules.phone)}
             error={!!errors.phone}
             helperText={errors.phone?.message as string}
           />
-
           <TextField
             label="Street"
             {...register("street", validationRules.street)}
             error={!!errors.street}
             helperText={errors.street?.message as string}
           />
-
           <TextField
             label="City"
             {...register("city", validationRules.city)}
             error={!!errors.city}
             helperText={errors.city?.message as string}
           />
-
           <TextField
             label="State"
             {...register("state", validationRules.state)}
             error={!!errors.state}
             helperText={errors.state?.message as string}
           />
-
           <TextField
             label="Zip Code"
             {...register("zip", validationRules.zip)}
@@ -157,7 +133,7 @@ const RegistrationForm: React.FC<Props> = ({
           />
         </>
       )}
-    </Box>
+    </div>
   );
 };
 

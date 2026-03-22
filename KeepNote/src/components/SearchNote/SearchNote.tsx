@@ -3,18 +3,13 @@ import styles from "./SearchNote.module.css";
 
 interface Props {
   onSearch: (value: string) => void;
-  searchText?: string; // optional controlled value
+  searchText?: string;
 }
 
 const SearchNote: React.FC<Props> = ({ onSearch, searchText = "" }) => {
   const [query, setQuery] = useState(searchText);
 
-  // keep local state in sync if parent changes searchText
-  useEffect(() => {
-    setQuery(searchText);
-  }, [searchText]);
-
-  // ✅ Debounced search effect
+  // Debounced search
   useEffect(() => {
     const handler = setTimeout(() => {
       onSearch(query.trim());
@@ -32,7 +27,7 @@ const SearchNote: React.FC<Props> = ({ onSearch, searchText = "" }) => {
 
   const handleClear = useCallback(() => {
     setQuery("");
-    onSearch(""); // reset search immediately
+    onSearch("");
   }, [onSearch]);
 
   return (

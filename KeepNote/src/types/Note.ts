@@ -1,4 +1,4 @@
-export type Status = "yet-to-start" | "completed";
+export type Status = "yet-to-start" | "in-progress" | "completed";
 
 export type Priority = "high" | "medium" | "low";
 

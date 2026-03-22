@@ -11,6 +11,8 @@ export interface NotesState {
   searchUrl: string;
   errorMessage?: string;
   hasSearched?: boolean;
+  // FIX: track active basic search term so ADD/DELETE can preserve the filter
+  activeSearchTerm: string;
 }
 
 /* -------------------- Actions -------------------- */
@@ -41,45 +43,60 @@ export const initialNotesState: NotesState = {
   searchUrl: "",
   errorMessage: "",
   hasSearched: false,
+  activeSearchTerm: "",
 };
+
+/* -------------------- Helper -------------------- */
+function applyBasicFilter(notes: Note[], term: string): Note[] {
+  if (!term) return notes;
+  return notes.filter((note) =>
+    note.title.toLowerCase().includes(term.toLowerCase())
+  );
+}
 
 /* -------------------- Reducer -------------------- */
 export function notesReducer(
   state: NotesState,
-  action: NotesAction,
+  action: NotesAction
 ): NotesState {
   switch (action.type) {
     case "SET_NOTES":
       return {
         ...state,
         notes: action.payload,
-        filteredNotes: action.payload,
+        filteredNotes: applyBasicFilter(action.payload, state.activeSearchTerm),
       };
 
-    case "ADD_NOTE":
+    case "ADD_NOTE": {
       const addedNotes = [...state.notes, action.payload];
       return {
         ...state,
         notes: addedNotes,
-        filteredNotes: addedNotes,
+        // FIX: preserve active search filter after adding a note
+        filteredNotes: applyBasicFilter(addedNotes, state.activeSearchTerm),
       };
+    }
 
-    case "DELETE_NOTE":
+    case "DELETE_NOTE": {
       const remainingNotes = state.notes.filter(
-        (n) => n.id !== action.payload.id,
+        (n) => n.id !== action.payload.id
       );
       return {
         ...state,
         notes: remainingNotes,
-        filteredNotes: remainingNotes,
+        // FIX: preserve active search filter after deleting a note
+        filteredNotes: applyBasicFilter(remainingNotes, state.activeSearchTerm),
+        advancedFilteredNotes: state.advancedFilteredNotes.filter(
+          (n) => n.id !== action.payload.id
+        ),
       };
+    }
 
     case "FILTER_BASIC":
       return {
         ...state,
-        filteredNotes: state.notes.filter((note) =>
-          note.title.toLowerCase().includes(action.payload.toLowerCase()),
-        ),
+        activeSearchTerm: action.payload,
+        filteredNotes: applyBasicFilter(state.notes, action.payload),
       };
 
     case "FILTER_ADVANCED": {
@@ -131,7 +148,7 @@ export function notesReducer(
       };
     }
 
-    case "SET_SORT":
+    case "SET_SORT": {
       const sortBy = action.payload;
       const sortedNotes = [...state.filteredNotes].sort((a, b) => {
         if (sortBy === "status") return a.status.localeCompare(b.status);
@@ -140,6 +157,7 @@ export function notesReducer(
         return 0;
       });
       return { ...state, sortBy, filteredNotes: sortedNotes };
+    }
 
     default:
       return state;

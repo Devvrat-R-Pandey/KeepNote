@@ -6,7 +6,6 @@ import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import styles from "./NoteManager.module.css";
 
 import {
-  Box,
   Typography,
   FormControl,
   Select,
@@ -19,17 +18,27 @@ import {
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useLocation } from "react-router-dom";
-
 import { AppContext } from "../../context/AppContext";
-import { useSnackbar } from "../../context/SnackbarContext";
-
+import { useSnackbar } from "../../hooks/useSnackbar";
 import type { Note } from "../../types/Note";
-
 import { fetchNotes, addNote, deleteNote } from "../../services/noteService";
 
 interface Props {
   viewMode: "basic" | "advanced";
   searchTerm: string;
+}
+
+interface FilterCriteria {
+  category?: string;
+  priority?: string;
+  __clear?: boolean;
+  __empty?: boolean;
+}
+
+interface NavState {
+  snackbarMessage?: string;
+  showSaved?: boolean;
+  showDeleted?: boolean;
 }
 
 const NoteManager: React.FC<Props> = ({ viewMode, searchTerm }) => {
@@ -39,12 +48,13 @@ const NoteManager: React.FC<Props> = ({ viewMode, searchTerm }) => {
 
   const [showAddNote, setShowAddNote] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [lastCriteria, setLastCriteria] = useState<{ category: string; priority: string }>({
+  const [lastCriteria, setLastCriteria] = useState<{
+    category: string;
+    priority: string;
+  }>({
     category: "",
     priority: "",
   });
-
-  /* ---------------- Fetch Notes ---------------- */
 
   useEffect(() => {
     const controller = new AbortController();
@@ -52,42 +62,32 @@ const NoteManager: React.FC<Props> = ({ viewMode, searchTerm }) => {
     const loadNotes = async () => {
       try {
         const data = await fetchNotes(controller.signal);
-
-        dispatch({
-          type: "SET_NOTES",
-          payload: data,
-        });
-
+        dispatch({ type: "SET_NOTES", payload: data });
         setLoading(false);
-      } catch (err: any) {
-        if (err?.name === "AbortError" || err?.code === "ERR_CANCELED") return;
-
-        console.error("Failed to fetch notes:", err.message);
-
-        showSnackbar(err?.message || "Failed to load notes", "error");
-
+      } catch (err) {
+        if (
+          err instanceof Error &&
+          (err.name === "AbortError" || err.message === "canceled")
+        )
+          return;
+        const message =
+          err instanceof Error ? err.message : "Failed to load notes";
+        console.error("Failed to fetch notes:", message);
+        showSnackbar(message, "error");
         setLoading(false);
       }
     };
 
     loadNotes();
-
     return () => controller.abort();
   }, [dispatch, showSnackbar]);
 
-  /* ---------------- Basic Search ---------------- */
-
   useEffect(() => {
-    dispatch({
-      type: "FILTER_BASIC",
-      payload: searchTerm,
-    });
+    dispatch({ type: "FILTER_BASIC", payload: searchTerm });
   }, [searchTerm, dispatch]);
 
-  /* ---------------- Advanced Search ---------------- */
-
   const handleAdvancedFilter = useCallback(
-    (criteria: any) => {
+    (criteria: FilterCriteria) => {
       if (criteria.__clear || criteria.__empty) {
         dispatch({ type: "FILTER_ADVANCED", payload: criteria });
         setLastCriteria({ category: "", priority: "" });
@@ -95,8 +95,8 @@ const NoteManager: React.FC<Props> = ({ viewMode, searchTerm }) => {
       }
 
       const newCriteria = {
-        category: criteria.category?.trim().toLowerCase() || "",
-        priority: criteria.priority?.trim().toLowerCase() || "",
+        category: criteria.category?.trim().toLowerCase() ?? "",
+        priority: criteria.priority?.trim().toLowerCase() ?? "",
       };
 
       const hasCriteriaChanged =
@@ -111,138 +111,85 @@ const NoteManager: React.FC<Props> = ({ viewMode, searchTerm }) => {
     [dispatch, lastCriteria],
   );
 
-  /* ---------------- Add Note ---------------- */
-
   const handleAddNote = async (note: Omit<Note, "id">) => {
     try {
-      const savedNote = await addNote(note, state.notes.notes);
-
-      dispatch({
-        type: "ADD_NOTE",
-        payload: savedNote,
-      });
-
+      const savedNote = await addNote(note);
+      dispatch({ type: "ADD_NOTE", payload: savedNote });
       showSnackbar("Note added successfully!");
-
       setShowAddNote(false);
-    } catch (err: any) {
-      console.error("Failed to add note:", err.message);
-
-      showSnackbar(err?.message || "Failed to add note", "error");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to add note";
+      console.error("Failed to add note:", message);
+      showSnackbar(message, "error");
     }
   };
-
-  /* ---------------- Delete Note ---------------- */
 
   const handleDeleteNote = async (id: number) => {
     try {
       await deleteNote(id);
-
-      dispatch({
-        type: "DELETE_NOTE",
-        payload: { id },
-      });
-
+      dispatch({ type: "DELETE_NOTE", payload: { id } });
       showSnackbar("Note deleted successfully!");
-    } catch (err: any) {
-      console.error("Failed to delete note:", err.message);
-
-      showSnackbar(err?.message || "Failed to delete note", "error");
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Failed to delete note";
+      console.error("Failed to delete note:", message);
+      showSnackbar(message, "error");
     }
   };
 
-  /* ---------------- Sort ---------------- */
-
   const handleSortChange = (value: string) => {
-    dispatch({
-      type: "SET_SORT",
-      payload: value,
-    });
+    dispatch({ type: "SET_SORT", payload: value });
   };
-
-  /* ---------------- Navigation Snackbar ---------------- */
 
   useEffect(() => {
     if (!location.state) return;
-
-    const navState: any = location.state;
-
+    const navState = location.state as NavState;
     if (navState.snackbarMessage) showSnackbar(navState.snackbarMessage);
-
     if (navState.showSaved) showSnackbar("Notecard saved successfully!");
-
     if (navState.showDeleted) showSnackbar("Note deleted successfully!");
-
     window.history.replaceState({}, document.title);
   }, [location.state, showSnackbar]);
 
-  /* ---------------- Loading ---------------- */
-
   if (loading) {
     return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="60vh"
-      >
+      <div className={styles.loading}>
         <CircularProgress />
-      </Box>
+      </div>
     );
   }
 
-  /* ---------------- Render ---------------- */
-
   return (
-    <main style={{ overflowY: "auto", overflowX: "hidden", height: "100vh" }}>
+    <main className={styles.main}>
       {viewMode === "basic" && (
         <>
-          <Box textAlign="center" mt={1}>
-            <Paper
-              sx={{
-                px: 3,
-                py: 1.5,
-                borderRadius: 1,
-                maxWidth: 450,
-                mx: "auto",
-              }}
-            >
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                gap={1}
-                sx={{ cursor: "pointer" }}
+          <div className={styles.addNoteBox}>
+            <Paper className={styles.addNotePaper}>
+              <div
+                className={styles.addNoteToggle}
                 onClick={() => setShowAddNote((prev) => !prev)}
               >
-                <Typography fontWeight={600}>Add Note Details</Typography>
-
+                <Typography className={styles.addNoteToggleLabel}>
+                  Add Note Details
+                </Typography>
                 <IconButton size="small">
                   <ExpandMoreIcon
-                    sx={{
-                      transform: showAddNote
-                        ? "rotate(180deg)"
-                        : "rotate(0deg)",
-                      transition: "0.3s",
-                    }}
+                    className={`${styles.expandIcon} ${showAddNote ? styles.open : ""}`}
                   />
                 </IconButton>
-              </Box>
-
+              </div>
               <Collapse in={showAddNote}>
-                <Box mt={1}>
+                <div className={styles.addNoteCollapse}>
                   <AddNoteForm onAddNote={handleAddNote} />
-                </Box>
+                </div>
               </Collapse>
             </Paper>
-          </Box>
+          </div>
 
-          <Box textAlign="center" mt={2} mb={2}>
-            <Typography variant="h5" fontWeight={600} gutterBottom>
+          <div className={styles.titleBar}>
+            <Typography className={styles.sectionTitle}>
               Checklist Chronicles: Conquering Tasks One Tick at a Time
             </Typography>
-
-            <FormControl size="small" sx={{ minWidth: 160 }}>
+            <FormControl size="small" className={styles.sortControl}>
               <Select
                 value={state.notes.sortBy}
                 displayEmpty
@@ -253,7 +200,7 @@ const NoteManager: React.FC<Props> = ({ viewMode, searchTerm }) => {
                 <MenuItem value="priority">Priority</MenuItem>
               </Select>
             </FormControl>
-          </Box>
+          </div>
 
           {state.notes.filteredNotes.length > 0 ? (
             <div className={styles.noteListWrapper}>
@@ -282,12 +229,11 @@ const NoteManager: React.FC<Props> = ({ viewMode, searchTerm }) => {
 
           {state.notes.hasSearched && (
             <>
-              <Box textAlign="center" mt={2} mb={2}>
-                <Typography variant="h5" fontWeight={600} gutterBottom>
+              <div className={styles.titleBar}>
+                <Typography className={styles.sectionTitle}>
                   Checklist Chronicles: Conquering Tasks One Tick at a Time
                 </Typography>
-
-                <FormControl size="small" sx={{ minWidth: 160 }}>
+                <FormControl size="small" className={styles.sortControl}>
                   <Select
                     value={state.notes.sortBy}
                     displayEmpty
@@ -298,7 +244,7 @@ const NoteManager: React.FC<Props> = ({ viewMode, searchTerm }) => {
                     <MenuItem value="priority">Priority</MenuItem>
                   </Select>
                 </FormControl>
-              </Box>
+              </div>
 
               {state.notes.advancedFilteredNotes.length > 0 ? (
                 <div className={styles.noteListWrapper}>

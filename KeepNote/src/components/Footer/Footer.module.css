@@ -1,37 +1,38 @@
+/* ------------------ Footer Layout ------------------ */
 .footer {
   width: 100%;
   background: var(--header-bg);
   border-top: 1px solid var(--border);
-  padding: 6px 12px;           /* 🔽 reduced vertical padding */
+  padding: 0 16px;
+  min-height: 48px;
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 12px;             /* 🔽 slightly smaller text */
-  color: var(--muted);
   flex-shrink: 0;
 }
 
-.footerLeft {
+/* ------------------ Copyright text ------------------ */
+.copyright {
+  font-size: 14px;
   font-weight: 500;
-}
-
-.footerRight {
-  display: flex;
-  gap: 10px;                   /* 🔽 slightly tighter spacing */
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  align-items: center;
-  max-width: 100%;
-}
-
-.socialIcon {
   color: var(--muted);
-  font-size: 16px;             /* 🔽 reduced from 18px */
-  transition: color 0.2s ease;
-  cursor: pointer;
+  margin: 0;
+}
+
+/* ------------------ Social icons row ------------------ */
+.socialRow {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+/* ------------------ Individual icon button override ------------------ */
+.socialIcon {
+  color: var(--muted) !important;
+  padding: 2px !important;
 }
 
 .socialIcon:hover {
-  color: var(--text);
+  color: var(--text) !important;
 }

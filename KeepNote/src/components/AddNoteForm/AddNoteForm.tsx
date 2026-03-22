@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import type { Note, Status, Priority } from "../../types/Note";
-
-// MUI Components
 import {
-  Box,
   Button,
   TextField,
   MenuItem,
@@ -11,7 +8,9 @@ import {
   InputLabel,
   FormControl,
   Paper,
+  FormHelperText,
 } from "@mui/material";
+import styles from "./AddNoteForm.module.css";
 
 interface AddNoteFormProps {
   onAddNote: (note: Omit<Note, "id">) => void;
@@ -32,44 +31,43 @@ const AddNoteForm: React.FC<AddNoteFormProps> = ({ onAddNote, onSuccess }) => {
     status?: string;
   }>({});
 
-  // 🔥 Realtime validation
-  const validateField = (name: string, value: string) => {
-    let error = "";
-    if (name === "title" && value.trim().length < 3) {
-      error = "Title must be at least 3 characters";
-    }
-    if (name === "description" && value.trim().length < 5) {
-      error = "Description must be at least 5 characters";
-    }
-    if (name === "category" && !value.trim()) {
-      error = "Category is required";
-    }
-    if (name === "status" && !value) {
-      error = "Status is required";
-    }
-    setErrors((prev) => ({ ...prev, [name]: error }));
+  const validateField = (name: string, value: string): string => {
+    if (name === "title" && value.trim().length < 3)
+      return "Title must be at least 3 characters";
+    if (name === "description" && value.trim().length < 5)
+      return "Description must be at least 5 characters";
+    if (name === "category" && !value.trim())
+      return "Category is required";
+    if (name === "status" && !value)
+      return "Status is required";
+    return "";
+  };
+
+  const handleBlurValidation = (name: string, value: string) => {
+    setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Final validation check
-    validateField("title", title);
-    validateField("description", description);
-    validateField("category", category);
-    validateField("status", status);
+    const newErrors = {
+      title: validateField("title", title),
+      description: validateField("description", description),
+      category: validateField("category", category),
+      status: validateField("status", status),
+    };
 
-    if (Object.values(errors).some((err) => err)) return;
+    setErrors(newErrors);
+    if (Object.values(newErrors).some((err) => err)) return;
 
-    const newNote: Omit<Note, "id"> = {
+    onAddNote({
       title: title.trim(),
       description: description.trim(),
       category: category.trim(),
       priority: priority || undefined,
       status,
-    };
+    });
 
-    onAddNote(newNote);
     resetForm();
     if (onSuccess) onSuccess();
   };
@@ -84,31 +82,15 @@ const AddNoteForm: React.FC<AddNoteFormProps> = ({ onAddNote, onSuccess }) => {
   };
 
   return (
-    <Box display="flex" justifyContent="center">
-      <Paper
-        elevation={3}
-        sx={{
-          p: 3,
-          width: "100%",
-          maxWidth: 600,
-          backgroundColor: "#fff",
-          borderRadius: 2,
-        }}
-      >
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-        >
+    <div className={styles.wrapper}>
+      <Paper elevation={3} className={styles.card}>
+        <form onSubmit={handleSubmit} className={styles.form}>
           <TextField
             label="Title"
             value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-              validateField("title", e.target.value);
-            }}
+            onChange={(e) => setTitle(e.target.value)}
+            onBlur={(e) => handleBlurValidation("title", e.target.value)}
             required
-            InputLabelProps={{ required: true }}
             error={!!errors.title}
             helperText={errors.title}
           />
@@ -118,33 +100,26 @@ const AddNoteForm: React.FC<AddNoteFormProps> = ({ onAddNote, onSuccess }) => {
             multiline
             rows={3}
             value={description}
-            onChange={(e) => {
-              setDescription(e.target.value);
-              validateField("description", e.target.value);
-            }}
+            onChange={(e) => setDescription(e.target.value)}
+            onBlur={(e) => handleBlurValidation("description", e.target.value)}
             required
-            InputLabelProps={{ required: true }}
             error={!!errors.description}
             helperText={errors.description}
           />
 
-          {/* ✅ Category + Priority side by side */}
-          <Box display="flex" gap={2}>
+          <div className={styles.row}>
             <TextField
               label="Category"
               value={category}
-              onChange={(e) => {
-                setCategory(e.target.value);
-                validateField("category", e.target.value);
-              }}
+              onChange={(e) => setCategory(e.target.value)}
+              onBlur={(e) => handleBlurValidation("category", e.target.value)}
               required
-              InputLabelProps={{ required: true }}
               fullWidth
               error={!!errors.category}
               helperText={errors.category}
             />
             <FormControl fullWidth>
-              <InputLabel required>Select Priority</InputLabel>
+              <InputLabel>Select Priority</InputLabel>
               <Select
                 value={priority}
                 label="Select Priority"
@@ -155,7 +130,7 @@ const AddNoteForm: React.FC<AddNoteFormProps> = ({ onAddNote, onSuccess }) => {
                 <MenuItem value="low">Low</MenuItem>
               </Select>
             </FormControl>
-          </Box>
+          </div>
 
           <FormControl fullWidth error={!!errors.status}>
             <InputLabel required>Status</InputLabel>
@@ -164,30 +139,26 @@ const AddNoteForm: React.FC<AddNoteFormProps> = ({ onAddNote, onSuccess }) => {
               label="Status"
               onChange={(e) => {
                 setStatus(e.target.value as Status);
-                validateField("status", e.target.value);
+                handleBlurValidation("status", e.target.value);
               }}
             >
               <MenuItem value="yet-to-start">Yet To Start</MenuItem>
               <MenuItem value="completed">Completed</MenuItem>
             </Select>
+            {errors.status && <FormHelperText>{errors.status}</FormHelperText>}
           </FormControl>
-          {errors.status && (
-            <Box sx={{ color: "error.main", fontSize: 12, mt: 0.5 }}>
-              {errors.status}
-            </Box>
-          )}
 
-          <Box display="flex" justifyContent="space-between" mt={2}>
-            <Button variant="outlined" color="secondary" onClick={resetForm}>
+          <div className={styles.btnRow}>
+            <Button variant="outlined" color="secondary" onClick={resetForm} type="button">
               RESET
             </Button>
             <Button variant="contained" color="primary" type="submit">
               ADD NOTE
             </Button>
-          </Box>
-        </Box>
+          </div>
+        </form>
       </Paper>
-    </Box>
+    </div>
   );
 };
 

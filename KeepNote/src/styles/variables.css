@@ -49,23 +49,14 @@ html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-
-  /* ✅ Allow one main vertical scrollbar */
-  overflow-y: auto;
-
-  /* ✅ Prevent horizontal scrollbar */
   overflow-x: hidden;
-
   background: var(--bg);
   color: var(--text);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* ✅ Ensure child containers don’t create extra scrollbars */
 main {
   flex: 1;
-  overflow-y: auto;   /* only main scrolls */
-  overflow-x: hidden; /* no horizontal scroll */
+  overflow-y: auto;   
+  overflow-x: hidden; 
 }

@@ -11,29 +11,22 @@ export function useFetch() {
 
   useEffect(() => {
     let didRespond = false;
-    setLoading(true);
 
     axios
-      .get(API_URL, { timeout: 5000 })
+      .get<Note[]>(API_URL, { timeout: 5000 })
       .then((res) => {
         didRespond = true;
-
-        // ✅ Normalize IDs to numbers
-        const normalized = res.data.map((note: any) => ({
-          ...note,
-          id: Number(note.id),
-        }));
-
+        const normalized = res.data.map((note) => ({ ...note, id: Number(note.id) }));
         setNotes(normalized);
         setLoading(false);
       })
-      .catch((err) => {
-        if (axios.isCancel(err)) return; // ✅ ignore cancelled requests
-
+      .catch((err: unknown) => {
+        if (axios.isCancel(err)) return;
         didRespond = true;
         setError("Unable to load notes. Please start JSON Server.");
         setLoading(false);
       });
+
     const timer = setTimeout(() => {
       if (!didRespond) {
         setError("⚠️ Timeout. Please check your connection.");

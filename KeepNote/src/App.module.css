@@ -1,90 +1,29 @@
-.app {
-  display: flex;
-  flex-direction: column;
+/* ------------------ Root shell ------------------ */
+.appShell {
   min-height: 100vh;
-  height: 100%;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Inter, system-ui, sans-serif;
-
-  /* ✅ Allow vertical scroll on the app */
-  overflow-y: auto;
-
-  /* ✅ Prevent horizontal scroll */
-  overflow-x: hidden;
-}
-
-/* Main content area */
-main {
-  flex: 1;
-  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  justify-content: flex-start;
-
-  /* ✅ Let main scroll vertically */
-  overflow-y: auto;
-
-  /* ✅ Prevent horizontal scroll */
-  overflow-x: hidden;
+  background: var(--app-bg);
 }
 
-/* Homepage layout */
-.noteListWrapper.homepage {
-  padding: 0 16px; /* reduced to avoid horizontal overflow */
-  margin-bottom: 16px;
-  overflow: visible; /* ✅ prevent nested scrollbars */
+/* ------------------ Main content area ------------------ */
+.main {
+  flex-grow: 1;
+  padding: 16px;
 }
 
-/* Advanced layout */
-.noteListWrapper.advanced {
-  padding: 0 16px;
-  margin-bottom: 16px;
-  overflow: visible;
+/* ------------------ Advanced/Basic search toggle button ------------------ */
+.toggleBtn {
+  text-transform: uppercase;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  height: 38px;
+  padding: 0 16px !important;
+  border-radius: 6px !important;
+  background-color: var(--yellow) !important;
+  color: #fff !important;
 }
 
-/* Sort bar */
-.sortBar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 16px;
-}
-
-.sortBar label {
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.sortBar select {
-  background-color: var(--header-bg);
-  color: var(--text);
-  border: 1px solid var(--text);
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.sortBar select option {
-  background-color: var(--header-bg);
-  color: var(--text);
-}
-
-/* Title */
-.chroniclesTitle {
-  text-align: center;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text);
-  margin: 16px 0 8px;
-}
-
-/* Toggle wrapper */
-.toggleWrapper {
-  display: flex;
-  justify-content: flex-end;
-  padding: 6px 12px;
+.toggleBtn:hover {
+  background-color: var(--yellow-dark) !important;
 }

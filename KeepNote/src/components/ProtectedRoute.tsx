@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+// FIX: was importing from AuthContext (unused context), should use AppContext
+import { AppContext } from "../context/AppContext";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { state } = useContext(AppContext);
 
-  const { state } = useContext(AuthContext);
-
-  if (!state.isAuthenticated) {
+  if (!state.auth.isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 

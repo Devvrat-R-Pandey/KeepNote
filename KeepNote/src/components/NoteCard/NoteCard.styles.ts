@@ -5,11 +5,11 @@ export const StyledCard = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 150px; /* 🔽 reduced height */
-  padding: 6px 10px; /* 🔽 tighter padding */
+  min-height: 160px;
+  padding: 6px 10px;
   border-radius: var(--radius, 6px);
   background: var(--card-bg, #1a1a1a);
-  font-size: 11px; /* 🔽 slightly smaller base font */
+  font-size: 11px;
   box-shadow: var(--shadow, 0 1px 2px rgba(0,0,0,0.1));
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   will-change: transform;
@@ -24,13 +24,13 @@ export const StyledCard = styled.div`
 export const CardHeader = styled.div`
   display: inline-flex;
   align-items: center;
-  gap: 6px; /* 🔽 tighter spacing */
+  gap: 6px;
   margin-bottom: 4px;
 `;
 
 /* ------------------ Title ------------------ */
 export const CardTitle = styled.h3`
-  font-size: 14px; /* 🔽 slightly smaller */
+  font-size: 14px;
   font-weight: 600;
   margin: 0;
   line-height: 1.2;
@@ -109,11 +109,22 @@ export const ActionRow = styled.div`
   margin-top: 6px;
 `;
 
-export const ActionIcon = styled.button`
+export const EditActionIcon = styled.button`
   background: transparent;
   border: none;
   cursor: pointer;
-  color: #60a5fa;
+  color: #3b82f6;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
+export const DeleteActionIcon = styled.button`
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #ef4444;
 
   &:hover {
     transform: scale(1.1);

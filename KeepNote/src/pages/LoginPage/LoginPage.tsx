@@ -1,9 +1,10 @@
 import React, { useState, useContext } from "react";
-import { Box, Typography, TextField, Button, Paper } from "@mui/material";
+import { TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { AppContext } from "../context/AppContext";
-import { useSnackbar } from "../context/SnackbarContext";
+import { AppContext } from "../../context/AppContext";
+import { useSnackbar } from "../../hooks/useSnackbar";
+import styles from "./LoginPage.module.css";
 
 const API_URL = "http://localhost:3000/users";
 
@@ -17,7 +18,6 @@ interface ApiUser {
 }
 
 const LoginPage: React.FC = () => {
-
   const navigate = useNavigate();
   const { dispatch } = useContext(AppContext);
   const { showSnackbar } = useSnackbar();
@@ -26,18 +26,13 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-
     if (!email || !password) {
       showSnackbar("Please enter email and password", "warning");
       return;
     }
 
     try {
-
-      const response = await axios.get<ApiUser[]>(API_URL, {
-        timeout: 5000,
-      });
-
+      const response = await axios.get<ApiUser[]>(API_URL, { timeout: 5000 });
       const users = response.data;
 
       const matchedUser = users.find(
@@ -67,54 +62,33 @@ const LoginPage: React.FC = () => {
 
       navigate("/home");
       showSnackbar("You have logged in successfully!", "success");
-
-    } catch (err: any) {
-
-      if (err.code === "ECONNABORTED") {
-        showSnackbar("Login request timed out. Please try again.", "error");
-        return;
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        if (err.code === "ECONNABORTED") {
+          showSnackbar("Login request timed out. Please try again.", "error");
+          return;
+        }
+        if (err.response) {
+          showSnackbar("Server error. Please try again later.", "error");
+          return;
+        }
       }
-
-      if (err.response) {
-        showSnackbar("Server error. Please try again later.", "error");
-        return;
-      }
-
       console.error(err);
       showSnackbar("Unable to login. Check server.", "error");
     }
   };
 
   return (
-    <Box
-      sx={{
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#1e1f22",
-      }}
-    >
-      <Paper
-        elevation={8}
-        sx={{
-          width: 360,
-          p: 4,
-          borderRadius: 2,
-          backgroundColor: "#fff",
-          textAlign: "center",
-        }}
-      >
-        <Typography variant="h6" fontWeight={600} mb={3}>
-          Login to KeepNote
-        </Typography>
+    <div className={styles.page}>
+      <div className={styles.card}>
+        <h2 className={styles.title}>Login to KeepNote</h2>
 
         <TextField
           placeholder="Email"
           fullWidth
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          sx={{ mb: 2.5 }}
+          className={styles.field}
         />
 
         <TextField
@@ -123,35 +97,27 @@ const LoginPage: React.FC = () => {
           fullWidth
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          sx={{ mb: 3 }}
+          onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+          className={styles.fieldLast}
         />
 
         <Button
           variant="contained"
           fullWidth
           onClick={handleLogin}
-          sx={{
-            backgroundColor: "#f2b01e",
-            fontWeight: 700,
-            py: 1.2,
-            mb: 2,
-            "&:hover": { backgroundColor: "#d99a18" },
-          }}
+          className={styles.loginBtn}
         >
           LOGIN
         </Button>
 
-        <Typography fontSize={13}>
+        <p className={styles.signupText}>
           New user?{" "}
-          <span
-            style={{ color: "#f2b01e", cursor: "pointer", fontWeight: 600 }}
-            onClick={() => navigate("/register")}
-          >
+          <span className={styles.signupLink} onClick={() => navigate("/register")}>
             Sign up here
           </span>
-        </Typography>
-      </Paper>
-    </Box>
+        </p>
+      </div>
+    </div>
   );
 };
 

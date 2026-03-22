@@ -1,0 +1,49 @@
+/* ------------------ Page wrapper ------------------ */
+.page {
+  min-height: calc(80vh - 64px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 16px;
+  box-sizing: border-box;
+}
+
+/* ------------------ Card ------------------ */
+.card {
+  width: 100%;
+  max-width: 320px;
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 24px 16px;
+  box-sizing: border-box;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.3);
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  margin: 0 0 16px 0;
+  color: #111;
+}
+
+/* ------------------ Fields ------------------ */
+.field {
+  margin-bottom: 16px !important;
+}
+
+.fieldLast {
+  margin-bottom: 24px !important;
+}
+
+/* ------------------ Submit button ------------------ */
+.submitBtn {
+  background-color: #f2b01e !important;
+  font-weight: 700 !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.submitBtn:hover {
+  background-color: #d99a18 !important;
+}

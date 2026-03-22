@@ -1,13 +1,12 @@
 /* Root container */
 #root {
-  height: 100%;              /* ✅ fill viewport */
-  width: 100%;               /* ✅ full width */
-  max-width: 1280px;         /* optional: keep centered max width */
+  height: 100%;             
+  width: 100%;             
   margin: 0 auto;
-  padding: 0;                /* ✅ remove extra padding that caused overflow */
+  padding: 0;               
   text-align: center;
   box-sizing: border-box;
-  overflow-x: hidden;        /* ✅ prevent horizontal scrollbar */
+  overflow-x: hidden;     
 }
 
 /* Logo styles */

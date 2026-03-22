@@ -1,0 +1,60 @@
+/* ------------------ Page wrapper ------------------ */
+.page {
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1e1f22;
+}
+
+/* ------------------ Card ------------------ */
+.card {
+  width: 360px;
+  padding: 32px;
+  border-radius: 8px;
+  background-color: #fff;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 24px 0;
+  color: #111;
+}
+
+/* ------------------ Fields ------------------ */
+.field {
+  margin-bottom: 20px !important;
+}
+
+.fieldLast {
+  margin-bottom: 24px !important;
+}
+
+/* ------------------ Login button ------------------ */
+.loginBtn {
+  background-color: #f2b01e !important;
+  font-weight: 700 !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  margin-bottom: 16px !important;
+}
+
+.loginBtn:hover {
+  background-color: #d99a18 !important;
+}
+
+/* ------------------ Sign up link ------------------ */
+.signupText {
+  font-size: 13px;
+  color: #333;
+  margin: 0;
+}
+
+.signupLink {
+  color: #f2b01e;
+  cursor: pointer;
+  font-weight: 600;
+}
